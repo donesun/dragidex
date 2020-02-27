@@ -1,4 +1,4 @@
-const Dragon = require("./dragon.js");
+const Dragon = require("../dragon/index");
 const express = require("express");
 const dragonRouter = require("./api/dragon");
 
@@ -27,7 +27,7 @@ const generationRouter = require("./api/generation");
 //   console.log('sunny', sunny)
 // }, 3000)
 
-// console.log('fooey', fooey)
+// console.log("vishy", vishy);
 // console.log('bloo', bloo)
 // console.log('treeny', treeny)
 
@@ -44,6 +44,14 @@ const generationRouter = require("./api/generation");
 app.locals.engine = engine; //app.locals field. now router has access to the .engine
 app.use("/dragon", dragonRouter); //basically getting the app.get('/dragon/new) from dragon.js in api folder. './dragon is the default route and dragonRouter is the required from api/dragon
 app.use("/generation", generationRouter);
+
+app.use((err, res, req, next) => {
+  const statusCode = err.statusCode || 500;
+  res.status(statusCode).json({
+    type: "error",
+    message: err.message
+  });
+});
 engine.start();
 
 //routing -- request is where data we grab stored. response = where we define what data the req responds back to server
